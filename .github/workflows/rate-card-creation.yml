@@ -63,7 +63,7 @@ jobs:
         run: |
           git add .
           git commit -m "Create rate card: ${{ inputs.city-name }}-${{ inputs.cluster-name }}-${{ inputs.org-name }}"
-          git push origin "$TARGET_BRANCH"
+          git push origin release/rate-rule-${{ steps.create_branch.outputs.date }}-Auto
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
@@ -71,8 +71,8 @@ jobs:
         uses: peter-evans/create-pull-request@v7
         with:
           base: 'release/rate-rule-final'
-          branch: 'release-${{ steps.create_branch.outputs.date }}-Auto'
-          title: 'Auto PR for rate card on release-${{ steps.create_branch.outputs.date }}-Auto'
+          branch: 'release/rate-rule-${{ steps.create_branch.outputs.date }}-Auto'
+          title: 'Auto PR for rate card on release/rate-rule-${{ steps.create_branch.outputs.date }}-Auto'
           body: 'This PR was automatically created by the GitHub Action.'
           labels: rate-card-automation
 
@@ -85,7 +85,7 @@ jobs:
             const { data: pullRequests } = await github.pulls.list({
               owner: context.repo.owner,
               repo: context.repo.repo,
-              head: 'release-${{ steps.create_branch.outputs.date }}-Auto',
+              head: 'release/rate-rule-${{ steps.create_branch.outputs.date }}-Auto',
               base: 'release/rate-rule-final',
               state: 'open'
             });
