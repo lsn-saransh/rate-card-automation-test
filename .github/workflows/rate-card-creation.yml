@@ -60,7 +60,6 @@ jobs:
           title: 'Auto PR for rate card on release/rate-rule-${{ steps.create_branch.outputs.date }}-Auto'
           body: 'This PR was automatically created by the GitHub Action.'
           labels: rate-card-automation
-          token: '${{ secrets.GITHUB_TOKEN }}'
 
       - name: Merge pull request
         if: success()
