@@ -48,9 +48,11 @@ jobs:
             git checkout -b $TARGET_BRANCH
           fi
 
-      - run: cd scripts && npm install
       - name: Run main.js
-        run: npm start
+        run: |
+          cd scripts
+          npm install
+          npm start
         env:
           CITY_NAME: ${{ inputs.city-name }}
           CLUSTER_NAME: ${{ inputs.cluster-name }}
