@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<kmodule xmlns="http://www.drools.org/xsd/kmodule">
+    <!-- ==================================== 1. Hyperlocal Rate Cards ==================================== -->
+    <kbase packages="com.titan.rule.drools.hyperlocal.guwahati.bike">
+        <ksession name="GuwahatiRateCard" type="stateless"/>
+    </kbase>
+    <kbase packages="com.titan.rule.drools.hyperlocal.guwahatiweekly.bike">
+        <ksession name="GuwahatiRateCardWeekly" type="stateless"/>
+    </kbase>
+    <kbase packages="com.titan.rule.drools.hyperlocal.guwahati.cycle">
+        <ksession name="GuwahatiCycleRateCard" type="stateless"/>
+    </kbase>
+</kmodule>
