@@ -24,8 +24,6 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
-        with:
-          ref: release/rate-rule-final
       - uses: actions/setup-node@v4
         with:
           node-version: '18'
@@ -42,10 +40,13 @@ jobs:
         run: |
           CURRENT_DATE=$(date +'%Y-%m-%d')
           echo "date=$CURRENT_DATE" >> $GITHUB_OUTPUT
-          TARGET_BRANCH="release-${CURRENT_DATE}-Auto"
-          if ! git ls-remote --heads origin "$TARGET_BRANCH"; then
+          TARGET_BRANCH="release/${CURRENT_DATE}-Auto"
+          git ls-remote --exit-code --heads origin $TARGET_BRANCH >/dev/null 2>&1
+          EXIT_CODE=$?
+          
+          if [[ $EXIT_CODE == '0' ]]; then
             git checkout -b "$TARGET_BRANCH"
-          else
+          elif [[ $EXIT_CODE == '2' ]]; then
             git checkout "$TARGET_BRANCH"
           fi
         
