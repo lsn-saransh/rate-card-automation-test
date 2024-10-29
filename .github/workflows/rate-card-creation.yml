@@ -1,4 +1,7 @@
 name: Rate card creation
+permissions:
+  contents: write
+  pull-requests: write
 on:
   workflow_dispatch:
     inputs:
@@ -54,12 +57,14 @@ jobs:
           RATE_CARD_FILE_LINK: ${{ inputs.rate-card-file-link }}
 
       - name: Create pull request
+        id: create_pr
         uses: peter-evans/create-pull-request@v7
         with:
           branch: 'release/rate-rule-${{ steps.create_branch.outputs.date }}-Auto'
           title: 'Auto PR for rate card on release/rate-rule-${{ steps.create_branch.outputs.date }}-Auto'
           body: 'This PR was automatically created by the GitHub Action.'
           labels: rate-card-automation
+          commit-message: "Create rate card: ${{ inputs.city-name }}-${{ inputs.cluster-name }}${{ inputs.org-name != '' && join('-', inputs.org-name) || '' }}"
 
       - name: Merge pull request
         if: success()
@@ -67,17 +72,8 @@ jobs:
         with:
           github-token: ${{ secrets.GITHUB_TOKEN }}
           script: |
-            const { data: pullRequests } = await github.rest.pulls.list({
+            await github.rest.pulls.merge({
               owner: context.repo.owner,
               repo: context.repo.repo,
-              head: 'release/rate-rule-${{ steps.create_branch.outputs.date }}-Auto',
-              base: 'release/rate-rule-final',
-              state: 'open'
+              pull_number: ${{ steps.create_pr.outputs.pull-request-number }}
             })
-            if (pullRequests.length > 0) {
-              await github.rest.pulls.merge({
-                owner: context.repo.owner,
-                repo: context.repo.repo,
-                pull_number: pullRequests[0].number,
-              })
-            }
