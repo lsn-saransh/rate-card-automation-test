@@ -76,6 +76,6 @@ jobs:
             await github.rest.pulls.merge({
               owner: context.repo.owner,
               repo: context.repo.repo,
-              merge_method: squash
+              merge_method: squash,
               pull_number: ${{ steps.create_pr.outputs.pull-request-number }}
             })
