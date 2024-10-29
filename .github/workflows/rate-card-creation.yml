@@ -40,16 +40,13 @@ jobs:
         run: |
           CURRENT_DATE=$(date +'%Y-%m-%d')
           echo "date=$CURRENT_DATE" >> $GITHUB_OUTPUT
-          TARGET_BRANCH="release/${CURRENT_DATE}-Auto"
-          git ls-remote --exit-code --heads origin $TARGET_BRANCH >/dev/null 2>&1
-          EXIT_CODE=$?
+          TARGET_BRANCH="release/rate-rule-${CURRENT_DATE}-Auto"
           
-          if [[ $EXIT_CODE == '0' ]]; then
-            git checkout -b "$TARGET_BRANCH"
-          elif [[ $EXIT_CODE == '2' ]]; then
-            git checkout "$TARGET_BRANCH"
+          if [[ -n $(git show-ref refs/heads/$TARGET_BRANCH) ]]; then
+            git checkout $TARGET_BRANCH
+          else
+            git checkout -b $TARGET_BRANCH
           fi
-        
 
       - run: cd scripts && npm install
       - name: Run main.js
