@@ -58,9 +58,7 @@ jobs:
           CLUSTER_NAME: ${{ inputs.cluster-name }}
           ORG_NAME: ${{ inputs.org-name }}
           RATE_CARD_FILE_LINK: ${{ inputs.rate-card-file-link }}
-
-      - name: Commit and push changes
-        run: |
+      - run: |
           git add .
           git commit -m "Create rate card: ${{ inputs.city-name }}-${{ inputs.cluster-name }}-${{ inputs.org-name }}"
           git push origin release/rate-rule-${{ steps.create_branch.outputs.date }}-Auto
@@ -82,17 +80,17 @@ jobs:
         with:
           github-token: ${{ secrets.GITHUB_TOKEN }}
           script: |
-            const { data: pullRequests } = await github.pulls.list({
+            const { data: pullRequests } = await github.rest.pulls.list({
               owner: context.repo.owner,
               repo: context.repo.repo,
               head: 'release/rate-rule-${{ steps.create_branch.outputs.date }}-Auto',
               base: 'release/rate-rule-final',
               state: 'open'
-            });
+            })
             if (pullRequests.length > 0) {
-              await github.pulls.merge({
+              await github.rest.pulls.merge({
                 owner: context.repo.owner,
                 repo: context.repo.repo,
                 pull_number: pullRequests[0].number,
-              });
+              })
             }
