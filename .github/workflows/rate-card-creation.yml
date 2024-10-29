@@ -1,0 +1,36 @@
+name: Rate card creation
+on:
+  workflow_dispatch:
+    inputs:
+      city-name:
+        description: City name
+        required: true
+        type: string
+      cluster-name:
+        description: Cluster name
+        required: true
+        type: string
+      org-name:
+        description: Organization name
+        required: false
+        type: string
+      rate-card-file-link:
+        description: Rate card file S3 link
+        required: true
+        type: string
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '18'
+      - name: Run main.js
+        run: npm start
+        env:
+          CITY_NAME: ${{ inputs.city-name }}
+          CLUSTER_NAME: ${{ inputs.cluster-name }}
+          ORG_NAME: ${{ inputs.org-name }}
+          RATE_CARD_FILE_LINK: ${{ inputs.rate-card-file-link }}
