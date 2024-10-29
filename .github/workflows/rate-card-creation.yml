@@ -65,13 +65,13 @@ jobs:
           body: 'This PR was automatically created by the GitHub Action.'
           labels: rate-card-automation
           commit-message: "Create rate card: ${{ inputs.city-name }}-${{ inputs.cluster-name }}${{ inputs.org-name != '' && join('-', inputs.org-name) || '' }}"
-          token: ${{ secrets.GITHUB_TOKEN }}
+          token: ${{ secrets.PAT }}
 
       - name: Merge pull request
         if: success()
         uses: actions/github-script@v7
         with:
-          github-token: ${{ secrets.GITHUB_TOKEN }}
+          github-token: ${{ secrets.PAT }}
           script: |
             await github.rest.pulls.merge({
               owner: context.repo.owner,
