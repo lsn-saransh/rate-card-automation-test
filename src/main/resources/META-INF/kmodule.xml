@@ -16,4 +16,7 @@
     <kbase packages="com.titan.rule.drools.hyperlocal.cityone.clusterone.orgtwo">
         <ksession name="CityoneClusteroneOrgtwoRateCard" type="stateless"/>
     </kbase>
+    <kbase packages="com.titan.rule.drools.hyperlocal.citytwo.clustertwo.orgtwo">
+        <ksession name="CitytwoClustertwoOrgtwoRateCard" type="stateless"/>
+    </kbase>
 </kmodule>
