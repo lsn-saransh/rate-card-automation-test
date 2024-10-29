@@ -10,4 +10,7 @@
     <kbase packages="com.titan.rule.drools.hyperlocal.guwahati.cycle">
         <ksession name="GuwahatiCycleRateCard" type="stateless"/>
     </kbase>
+    <kbase packages="com.titan.rule.drools.hyperlocal.cityone.clustertwo">
+        <ksession name="CityoneClustertwoRateCard" type="stateless"/>
+    </kbase>
 </kmodule>
