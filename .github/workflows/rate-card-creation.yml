@@ -64,7 +64,7 @@ jobs:
           title: 'Auto PR for rate card on release/rate-rule-${{ steps.create_branch.outputs.date }}-Auto'
           body: 'This PR was automatically created by the GitHub Action.'
           labels: rate-card-automation
-          commit-message: "Create rate card: ${{ inputs.city-name }}-${{ inputs.cluster-name }}${{ inputs.org-name != '' && join('-', inputs.org-name) || '' }}"
+          commit-message: "Create rate card: ${{ inputs.city-name }}-${{ inputs.cluster-name }}${{ inputs.org-name != '' && format('-{0}', inputs.org-name) || '' }}"
           token: ${{ secrets.PAT }}
 
       - name: Merge pull request
