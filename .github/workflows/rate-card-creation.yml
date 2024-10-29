@@ -28,7 +28,9 @@ jobs:
         with:
           node-version: '18'
       - name: Run main.js
-        run: npm start
+        run: |
+          cd scripts
+          npm start
         env:
           CITY_NAME: ${{ inputs.city-name }}
           CLUSTER_NAME: ${{ inputs.cluster-name }}

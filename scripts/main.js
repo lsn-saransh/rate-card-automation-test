@@ -14,6 +14,8 @@ async function createRateCard() {
     console.log("Cluster name", clusterName)
     console.log("Org name", orgName)
     console.log("Rate card file link", rateCardFileLink)
+
+    throw "error"
 }
 
 (async () => {
