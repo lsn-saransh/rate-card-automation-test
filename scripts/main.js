@@ -80,6 +80,31 @@ function modifyKModuleFile(cityName, clusterName, orgName) {
     const data = fs.readFileSync(kmoduleFilePath, {encoding: "utf8"})
     const parsedXml = new DOMParser().parseFromString(data, "application/xml")
 
+    const kmodule = parsedXml.documentElement
+    const kbaseElements = kmodule.getElementsByTagName("kbase")
+
+    let modifyKModule = true
+    for (let i = 0; i < kbaseElements.length; i++) {
+        const kbase = kbaseElements[i]
+        if (kbase.getAttribute("packages") === packageName) {
+            console.log(`kbase with packages="${packageName}" already exists`)
+            modifyKModule = false
+            break
+        }
+        const kSessionElements = kbase.getElementsByTagName("ksession")
+        if (kSessionElements.length > 0) {
+            if (kSessionElements[0].getAttribute("name") === rateCardName) {
+                console.log(`ksession with name="${rateCardName}" already exists`)
+                modifyKModule = false
+                break
+            }
+        }
+    }
+
+    if (!modifyKModule) {
+        return
+    }
+
     const newKbase = parsedXml.createElement("kbase")
     newKbase.setAttribute("packages", packageName)
 
@@ -102,7 +127,7 @@ function modifyKModuleFile(cityName, clusterName, orgName) {
         const endTime = performance.now()
         console.log(`Total time taken: ${endTime - startTime} ms`);
     } catch (e) {
-        console.error("Error", e)
+        console.error(e)
         process.exit(1)
     }
 })()
