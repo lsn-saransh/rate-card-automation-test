@@ -61,7 +61,7 @@ jobs:
         uses: peter-evans/create-pull-request@v7
         with:
           branch: 'release/rate-rule-${{ steps.create_branch.outputs.date }}-Auto'
-          title: 'Auto PR for rate card ${{ github.run_id }} on release/rate-rule-${{ steps.create_branch.outputs.date }}-Auto'
+          title: 'Run id - ${{ github.run_number }}: Auto PR for rate card on release/rate-rule-${{ steps.create_branch.outputs.date }}-Auto'
           body: |
             This PR was automatically created by the GitHub Action.
             Workflow id: ${{ github.workflow }}
