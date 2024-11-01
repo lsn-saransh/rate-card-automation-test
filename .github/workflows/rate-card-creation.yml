@@ -61,14 +61,18 @@ jobs:
         uses: peter-evans/create-pull-request@v7
         with:
           branch: 'release/rate-rule-${{ steps.create_branch.outputs.date }}-Auto'
-          title: 'Auto PR for rate card on release/rate-rule-${{ steps.create_branch.outputs.date }}-Auto'
-          body: 'This PR was automatically created by the GitHub Action.'
+          title: 'Auto PR for rate card ${{ github.run_id }} on release/rate-rule-${{ steps.create_branch.outputs.date }}-Auto'
+          body: |
+            This PR was automatically created by the GitHub Action.
+            Workflow id: ${{ github.workflow }}
+            Run id: ${{ github.run_id }}
+            Run number: ${{ github.run_number }}
           labels: rate-card-automation
           commit-message: "Create rate card: ${{ inputs.city-name }}-${{ inputs.cluster-name }}${{ inputs.org-name != '' && format('-{0}', inputs.org-name) || '' }}"
           token: ${{ secrets.PAT }}
 
       - name: Merge pull request
-        if: success()
+        if: success() && steps.create_pr.outputs.pull-request-number
         uses: actions/github-script@v7
         with:
           github-token: ${{ secrets.PAT }}
