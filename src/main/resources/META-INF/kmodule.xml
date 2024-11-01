@@ -10,34 +10,4 @@
     <kbase packages="com.titan.rule.drools.hyperlocal.guwahati.cycle">
         <ksession name="GuwahatiCycleRateCard" type="stateless"/>
     </kbase>
-    <kbase packages="com.titan.rule.drools.hyperlocal.cityone.clustertwo">
-        <ksession name="CityoneClustertwoRateCard" type="stateless"/>
-    </kbase>
-    <kbase packages="com.titan.rule.drools.hyperlocal.cityone.clusterone.orgtwo">
-        <ksession name="CityoneClusteroneOrgtwoRateCard" type="stateless"/>
-    </kbase>
-    <kbase packages="com.titan.rule.drools.hyperlocal.citytwo.clustertwo.orgtwo">
-        <ksession name="CitytwoClustertwoOrgtwoRateCard" type="stateless"/>
-    </kbase>
-    <kbase packages="com.titan.rule.drools.hyperlocal.citytwo.clusterone">
-        <ksession name="CitytwoClusteroneRateCard" type="stateless"/>
-    </kbase>
-    <kbase packages="com.titan.rule.drools.hyperlocal.citytwo.clustertwo.orgtwo">
-        <ksession name="CitytwoClustertwoOrgtwoRateCard" type="stateless"/>
-    </kbase>
-    <kbase packages="com.titan.rule.drools.hyperlocal.citythree.clustertwo.orgone">
-        <ksession name="CitythreeClustertwoOrgoneRateCard" type="stateless"/>
-    </kbase>
-    <kbase packages="com.titan.rule.drools.hyperlocal.cityone.clustertwo.orgtwo">
-        <ksession name="CityoneClustertwoOrgtwoRateCard" type="stateless"/>
-    </kbase>
-    <kbase packages="com.titan.rule.drools.hyperlocal.cityone.clusterone.orgone">
-        <ksession name="CityoneClusteroneOrgoneRateCard" type="stateless"/>
-    </kbase>
-    <kbase packages="com.titan.rule.drools.hyperlocal.cityone.clusterone.orgone">
-        <ksession name="CityoneClusteroneOrgoneRateCard" type="stateless"/>
-    </kbase>
-    <kbase packages="com.titan.rule.drools.hyperlocal.cityone.clusterone.orgone">
-        <ksession name="CityoneClusteroneOrgoneRateCard" type="stateless"/>
-    </kbase>
 </kmodule>
