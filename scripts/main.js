@@ -10,12 +10,12 @@ const kmoduleFilePath = "../src/main/resources/META-INF/kmodule.xml"
 const kbasePackagePrefix = "com.titan.rule.drools.hyperlocal"
 
 async function createRateCard() {
-    let type = process.env.TYPE || "hyperlocal"
-    let runType = process.env.RUN_TYPE || "daily"
-    let cityName = process.env.CITY_NAME || "bangalore"
-    let clusterName = process.env.CLUSTER_NAME || "onetwothree"
-    let orgName = process.env.ORG_NAME || "fourfive"
-    const rateCardFileLink = process.env.RATE_CARD_FILE_LINK || "https://earn-de-docs.s3.ap-south-1.amazonaws.com/rate-card/CityoneClusteroneOrgone_2024-10-31T12%3A58%3A24.xlsx"
+    let type = process.env.TYPE || ""
+    let runType = process.env.RUN_TYPE || ""
+    let cityName = process.env.CITY_NAME || ""
+    let clusterName = process.env.CLUSTER_NAME || ""
+    let orgName = process.env.ORG_NAME || ""
+    const rateCardFileLink = process.env.RATE_CARD_FILE_LINK || ""
 
     console.log("----ENV----")
     console.log("Type: ", type)
