@@ -5,6 +5,13 @@ permissions:
 on:
   workflow_dispatch:
     inputs:
+      type:
+        description: Rate card type
+        required: true
+        default: hyperlocal
+        type: choice
+        options:
+          - hyperlocal
       city-name:
         description: City name
         required: true
@@ -51,6 +58,7 @@ jobs:
           npm install
           npm start
         env:
+          TYPE: ${{ inputs.type }}
           CITY_NAME: ${{ inputs.city-name }}
           CLUSTER_NAME: ${{ inputs.cluster-name }}
           ORG_NAME: ${{ inputs.org-name }}
@@ -67,6 +75,7 @@ jobs:
             Workflow id: ${{ github.workflow }}
             Run id: ${{ github.run_id }}
             Run number: ${{ github.run_number }}
+            Rate card type: ${{ inputs.type }}
           labels: rate-card-automation
           commit-message: "Create rate card: ${{ inputs.city-name }}-${{ inputs.cluster-name }}${{ inputs.org-name != '' && format('-{0}', inputs.org-name) || '' }}"
           token: ${{ secrets.PAT }}
