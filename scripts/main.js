@@ -10,21 +10,23 @@ const kmoduleFilePath = "../src/main/resources/META-INF/kmodule.xml"
 const kbasePackagePrefix = "com.titan.rule.drools.hyperlocal"
 
 async function createRateCard() {
-    let type = process.env.TYPE || ""
-    let cityName = process.env.CITY_NAME || ""
-    let clusterName = process.env.CLUSTER_NAME || ""
-    let orgName = process.env.ORG_NAME || ""
-    const rateCardFileLink = process.env.RATE_CARD_FILE_LINK || ""
+    let type = process.env.TYPE || "hyperlocal"
+    let runType = process.env.RUN_TYPE || "daily"
+    let cityName = process.env.CITY_NAME || "bangalore"
+    let clusterName = process.env.CLUSTER_NAME || "onetwothree"
+    let orgName = process.env.ORG_NAME || "fourfive"
+    const rateCardFileLink = process.env.RATE_CARD_FILE_LINK || "https://earn-de-docs.s3.ap-south-1.amazonaws.com/rate-card/CityoneClusteroneOrgone_2024-10-31T12%3A58%3A24.xlsx"
 
     console.log("----ENV----")
     console.log("Type: ", type)
+    console.log("Run type: ", runType)
     console.log("City name: ", cityName)
     console.log("Cluster name: ", clusterName)
     console.log("Org name: ", orgName)
     console.log("Rate card file link: ", rateCardFileLink)
 
-    if (type === "" || cityName === "" || clusterName === "" || rateCardFileLink === "") {
-        throw new Error("invalid type/city name/cluster name/rate card file link")
+    if (type === "" || runType === "" || cityName === "" || clusterName === "" || rateCardFileLink === "") {
+        throw new Error("invalid type/run type/city name/cluster name/rate card file link")
     }
 
     const suffix = rateCardFileLink.substring(rateCardFileLink.lastIndexOf("."))
@@ -38,26 +40,30 @@ async function createRateCard() {
 
     console.log("----INPUTS----")
     console.log("Type: ", type)
+    console.log("Run type: ", runType)
     console.log("City name: ", cityName)
     console.log("Cluster name: ", clusterName)
     console.log("Org name: ", orgName)
     console.log("Rate card file link: ", rateCardFileLink)
 
     let startTime = performance.now()
-    await downloadAndSaveFile(type, cityName, clusterName,
+    await downloadAndSaveFile(type, runType, cityName, clusterName,
         orgName, rateCardFileLink)
     let endTime = performance.now()
     console.log(`Time taken to download and save rate card: ${endTime - startTime} ms`)
     startTime = performance.now()
-    modifyKModuleFile(cityName, clusterName, orgName)
+    modifyKModuleFile(type, runType, cityName, clusterName, orgName)
     endTime = performance.now()
     console.log(`Time taken to modify kmodule: ${endTime - startTime} ms`)
 }
 
-async function downloadAndSaveFile(type, cityName, clusterName, orgName, rateCarFileLink) {
+async function downloadAndSaveFile(type, runType, cityName, clusterName, orgName, rateCarFileLink) {
     let directoryPath
     if (type !== "hyperlocal") {
         throw new Error("invalid type, expected 'hyperlocal'")
+    }
+    if (runType === "weekly") {
+        cityName += runType
     }
     directoryPath = path.join(__dirname, rateCardBaseDirectory, cityName)
     let fileName = path.basename(rateCarFileLink)
@@ -70,9 +76,6 @@ async function downloadAndSaveFile(type, cityName, clusterName, orgName, rateCar
         throw new Error("non-success response while downloading rate card")
     }
     const buffer = await response.arrayBuffer()
-    if (orgName !== "") {
-        directoryPath = path.join(directoryPath, orgName)
-    }
     if (!fs.existsSync(directoryPath)) {
         fs.mkdirSync(directoryPath, {recursive: true})
     }
@@ -81,14 +84,21 @@ async function downloadAndSaveFile(type, cityName, clusterName, orgName, rateCar
     console.log(`File download and saved to ${filePath}`)
 }
 
-function modifyKModuleFile(cityName, clusterName, orgName) {
-    let packageName = `${kbasePackagePrefix}.${cityName}.${clusterName}`
+function modifyKModuleFile(type, runType, cityName, clusterName, orgName) {
+    let packageCityName = cityName
+    if (runType === "weekly") {
+        packageCityName += runType
+    }
+    let packageName = `${kbasePackagePrefix}.${packageCityName}.${clusterName}`
     let rateCardName = `${capitalize(cityName)}${capitalize(clusterName)}`
     if (orgName && orgName !== "") {
         packageName += `.${orgName}`
         rateCardName += `${capitalize(orgName)}`
     }
     rateCardName += "RateCard"
+    if (runType === "weekly") {
+        rateCardName += "Weekly"
+    }
     console.log("Package name: ", packageName)
     console.log("Rate card name: ", rateCardName)
 

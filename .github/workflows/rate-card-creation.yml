@@ -12,6 +12,13 @@ on:
         type: choice
         options:
           - hyperlocal
+      run-type:
+        description: Daily/Weekly rate card
+        required: true
+        type: choice
+        options:
+          - daily
+          - weekly
       city-name:
         description: City name
         required: true
@@ -59,6 +66,7 @@ jobs:
           npm start
         env:
           TYPE: ${{ inputs.type }}
+          RUN_TYPE: ${{ inputs.run-type }}
           CITY_NAME: ${{ inputs.city-name }}
           CLUSTER_NAME: ${{ inputs.cluster-name }}
           ORG_NAME: ${{ inputs.org-name }}
