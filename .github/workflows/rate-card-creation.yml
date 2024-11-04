@@ -85,7 +85,7 @@ jobs:
             Run number: ${{ github.run_number }}
             Rate card type: ${{ inputs.type }}
           labels: rate-card-automation
-          commit-message: "Create rate card: ${{ inputs.city-name }}-${{ inputs.cluster-name }}${{ inputs.org-name != '' && format('-{0}', inputs.org-name) || '' }}"
+          commit-message: "Create rate card: ${{ inputs.city-name }}-${{ inputs.cluster-name }}${{ inputs.org-name != '' && format('-{0}', inputs.org-name) || '' }}${{ inputs.run-type == 'weekly' && format('-{0}', inputs.run-type) }}"
           token: ${{ secrets.PAT }}
 
       - name: Merge pull request
