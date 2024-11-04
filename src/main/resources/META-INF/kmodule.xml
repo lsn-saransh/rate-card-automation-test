@@ -13,4 +13,7 @@
     <kbase packages="com.titan.rule.drools.hyperlocal.cityone.clusterone.orgone">
         <ksession name="CityoneClusteroneOrgoneRateCard" type="stateless"/>
     </kbase>
+    <kbase packages="com.titan.rule.drools.hyperlocal.bangaloreweekly.bcd">
+        <ksession name="BangaloreBcdRateCardWeekly" type="stateless"/>
+    </kbase>
 </kmodule>
