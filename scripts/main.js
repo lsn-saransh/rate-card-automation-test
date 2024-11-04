@@ -10,13 +10,21 @@ const kmoduleFilePath = "../src/main/resources/META-INF/kmodule.xml"
 const kbasePackagePrefix = "com.titan.rule.drools.hyperlocal"
 
 async function createRateCard() {
+    let type = process.env.TYPE || ""
     let cityName = process.env.CITY_NAME || ""
     let clusterName = process.env.CLUSTER_NAME || ""
     let orgName = process.env.ORG_NAME || ""
     const rateCardFileLink = process.env.RATE_CARD_FILE_LINK || ""
 
-    if (cityName === "" || clusterName === "" || rateCardFileLink === "") {
-        throw new Error("invalid city name/cluster name/rate card file link")
+    console.log("----ENV----")
+    console.log("Type: ", type)
+    console.log("City name: ", cityName)
+    console.log("Cluster name: ", clusterName)
+    console.log("Org name: ", orgName)
+    console.log("Rate card file link: ", rateCardFileLink)
+
+    if (type === "" || cityName === "" || clusterName === "" || rateCardFileLink === "") {
+        throw new Error("invalid type/city name/cluster name/rate card file link")
     }
 
     const suffix = rateCardFileLink.substring(rateCardFileLink.lastIndexOf("."))
@@ -27,13 +35,16 @@ async function createRateCard() {
     cityName = cityName.toLowerCase()
     clusterName = clusterName.toLowerCase()
     orgName = orgName.toLowerCase()
+
+    console.log("----INPUTS----")
+    console.log("Type: ", type)
     console.log("City name: ", cityName)
     console.log("Cluster name: ", clusterName)
     console.log("Org name: ", orgName)
     console.log("Rate card file link: ", rateCardFileLink)
 
     let startTime = performance.now()
-    await downloadAndSaveFile(cityName, clusterName,
+    await downloadAndSaveFile(type, cityName, clusterName,
         orgName, rateCardFileLink)
     let endTime = performance.now()
     console.log(`Time taken to download and save rate card: ${endTime - startTime} ms`)
@@ -43,8 +54,12 @@ async function createRateCard() {
     console.log(`Time taken to modify kmodule: ${endTime - startTime} ms`)
 }
 
-async function downloadAndSaveFile(cityName, clusterName, orgName, rateCarFileLink) {
-    let directoryPath = path.join(__dirname, rateCardBaseDirectory, cityName, clusterName)
+async function downloadAndSaveFile(type, cityName, clusterName, orgName, rateCarFileLink) {
+    let directoryPath
+    if (type !== "hyperlocal") {
+        throw new Error("invalid type, expected 'hyperlocal'")
+    }
+    directoryPath = path.join(__dirname, rateCardBaseDirectory, cityName)
     let fileName = path.basename(rateCarFileLink)
     if (fileName.indexOf(".xlsx") === -1 || fileName.indexOf("_") === -1) {
         throw new Error("invalid file name")
