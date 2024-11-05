@@ -5,6 +5,11 @@ permissions:
 on:
   workflow_dispatch:
     inputs:
+      env:
+        description: Environment
+        required: true
+        default: staging
+        type: string
       type:
         description: Rate card type
         required: true
@@ -65,6 +70,7 @@ jobs:
           npm install
           npm start
         env:
+          ENV_VALUE: ${{ inputs.env }}
           TYPE: ${{ inputs.type }}
           RUN_TYPE: ${{ inputs.run-type }}
           CITY_NAME: ${{ inputs.city-name }}
@@ -76,7 +82,7 @@ jobs:
         id: create_pr
         uses: peter-evans/create-pull-request@v7
         with:
-          branch: 'release/rate-rule-${{ steps.create_branch.outputs.date }}-Auto'
+          branch: ${{ inputs.env == 'staging' && format('release/rate-rule-{0}-Auto-stage', steps.create_branch.outputs.date) || format('release/rate-rule-{0}-Auto', steps.create_branch.outputs.date)}}
           title: 'Run id - ${{ github.run_number }}: Auto PR for rate card on release/rate-rule-${{ steps.create_branch.outputs.date }}-Auto'
           body: |
             This PR was automatically created by the GitHub Action.
