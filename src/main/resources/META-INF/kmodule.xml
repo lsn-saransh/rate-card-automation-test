@@ -22,4 +22,7 @@
     <kbase packages="com.titan.rule.drools.hyperlocal.bangalore.bcd.bike">
         <ksession name="BangaloreBcdBikeRateCard" type="stateless"/>
     </kbase>
+    <kbase packages="com.titan.rule.drools.hyperlocal.bangalore.abc.bike">
+        <ksession name="BangaloreAbcBikeRateCard" type="stateless"/>
+    </kbase>
 </kmodule>
