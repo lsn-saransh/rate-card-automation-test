@@ -41,6 +41,10 @@ on:
         required: true
         type: string
 
+concurrency:
+  group: ${{ github.ref }}
+  cancel-in-progress: false
+
 jobs:
   create-rate-card:
     runs-on: ubuntu-latest
@@ -58,9 +62,10 @@ jobs:
           git config --global user.name "github-actions[bot]"
           git branch -a
 
-      - name: Create or switch to release branch
-        id: create_branch
+      - name: Get current date
+        id: current_date
         run: |
+          export TZ="Asia/Kolkata"
           CURRENT_DATE=$(date +'%Y-%m-%d')
           echo "date=$CURRENT_DATE" >> $GITHUB_OUTPUT
 
@@ -82,16 +87,18 @@ jobs:
         id: create_pr
         uses: peter-evans/create-pull-request@v7
         with:
-          branch: ${{ inputs.env == 'staging' && format('release/rate-rule-{0}-Auto-stage', steps.create_branch.outputs.date) || format('release/rate-rule-{0}-Auto', steps.create_branch.outputs.date)}}
-          title: 'Run id - ${{ github.run_number }}: Auto PR for rate card on release/rate-rule-${{ steps.create_branch.outputs.date }}-Auto'
+          branch: ${{ inputs.env == 'staging' && format('release/rate-rule-{0}-Auto-stage', steps.current_date.outputs.date) || format('release/rate-rule-{0}-Auto', steps.current_date.outputs.date)}}
+          title: "Run id - ${{ github.run_number }}: Auto PR for rate card on ${{ inputs.env == 'staging' && format('release/rate-rule-{0}-Auto-stage', steps.current_date.outputs.date) || format('release/rate-rule-{0}-Auto', steps.current_date.outputs.date)}}"
           body: |
             This PR was automatically created by the GitHub Action.
             Workflow id: ${{ github.workflow }}
             Run id: ${{ github.run_id }}
             Run number: ${{ github.run_number }}
+            Env: ${{ inputs.env }}
             Rate card type: ${{ inputs.type }}
+            Run type: ${{ inputs.run-type }}
           labels: rate-card-automation
-          commit-message: "Create rate card: ${{ inputs.city-name }}-${{ inputs.cluster-name }}${{ inputs.org-name != '' && format('-{0}', inputs.org-name) || '' }}${{ inputs.run-type == 'weekly' && format('-{0}', inputs.run-type) }}"
+          commit-message: "Create rate card: ${{ inputs.city-name }}-${{ inputs.cluster-name }}${{ inputs.org-name != '' && format('-{0}', inputs.org-name) || '' }}${{ inputs.run-type == 'weekly' && format('-{0}', inputs.run-type) || '' }}"
           token: ${{ secrets.PAT }}
 
       - name: Merge pull request
